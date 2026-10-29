@@ -10,3 +10,5 @@ print(resposta.url)
 dados = resposta.json()
 print(type(dados))
 print(dados.keys())
+for c in dados.get("vulnerabilities",[]):
+    print(c.get("cve", {}).get("id"))
