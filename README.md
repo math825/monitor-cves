@@ -17,8 +17,8 @@ Monitor de vulnerabilidades em Python: busca CVEs em uma API pública, filtra po
 ## Roadmap
 
 - [x] Estrutura inicial do repositório
-- [ ] Buscar dados da API (`requests`, JSON)
-- [ ] Organizar em funções com tratamento de erros
+- [x] Buscar dados da API (`requests`, JSON)
+- [x] Organizar em funções com tratamento de erros
 - [ ] Filtrar e ordenar por gravidade e produto
 - [ ] Salvar resultados em CSV/JSON
 - [ ] Automatizar com aviso por e-mail ou Telegram
