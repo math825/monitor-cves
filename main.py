@@ -1,3 +1,5 @@
+import csv 
+import json 
 import requests
 from datetime import datetime, timedelta
 
@@ -30,14 +32,12 @@ def buscar_cves(quantidade, severidade=None, dias=None, palavra=None):
 def extrair_dados(vulnerabilidade):
     cve = vulnerabilidade.get("cve", {})
 
-    # pega a descrição em inglês
     descricao = None
     for d in cve.get("descriptions", []):
         if d.get("lang") == "en":
             descricao = d.get("value")
             break
 
-    # tenta a versão mais nova do CVSS e, se não tiver, cai para a mais antiga
     nota = None
     severidade = None
     metricas = cve.get("metrics", {})
@@ -72,15 +72,28 @@ def ordenar_por_nota(lista):
         reverse=True,
     )
 
+def salvar_csv(lista, nome_arquivo):
+    colunas = ["id", "descricao", "nota", "severidade"]
+    with open(nome_arquivo, "w", newline="", encoding="utf-8") as arquivo:
+        escritor = csv.DictWriter(arquivo, fieldnames=colunas)
+        escritor.writeheader()
+        escritor.writerows(lista)
+
+
+# NOVO
+def salvar_json(lista, nome_arquivo):
+    with open(nome_arquivo, "w", encoding="utf-8") as arquivo:
+        json.dump(lista, arquivo, ensure_ascii=False, indent=2)
+
 
 def main():
-    # ===== ESCOLHA AQUI O QUE VOCÊ QUER =====
-    QUANTIDADE = 50        # quantos CVEs pedir
-    SEVERIDADE = "CRITICAL"  # "LOW", "MEDIUM", "HIGH", "CRITICAL" ou None para todas
-    DIAS = 30              # publicados nos últimos X dias (máximo 120) ou None
-    PALAVRA = None         # ex.: "windows", "remote code execution" ou None
-    NOTA_MINIMA = 0        # filtro extra de nota, de 0 a 10
-    # ========================================
+    
+    QUANTIDADE = 50
+    SEVERIDADE = "CRITICAL"
+    DIAS = 30
+    PALAVRA = None
+    NOTA_MINIMA = 0
+    
 
     dados = buscar_cves(QUANTIDADE, SEVERIDADE, DIAS, PALAVRA)
     if dados is None:
@@ -97,6 +110,13 @@ def main():
     for cve in filtrados:
         print(f'{cve["id"]} | nota {cve["nota"]} | {cve["severidade"]}')
         print(f'   {(cve["descricao"] or "")[:150]}\n')
-    
+
+    # NOVO
+    data_hoje = datetime.now().strftime("%Y-%m-%d")
+    salvar_csv(filtrados, f"cves_{data_hoje}.csv")
+    salvar_json(filtrados, f"cves_{data_hoje}.json")
+    print(f"Arquivos salvos: cves_{data_hoje}.csv e cves_{data_hoje}.json")
+
+
 if __name__ == "__main__":
     main()
