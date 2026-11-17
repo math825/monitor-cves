@@ -1,0 +1,302 @@
+[
+  {
+    "id": "CVE-2026-78162",
+    "descricao": "Deserialization of Untrusted Data vulnerability in Apache Camel.\n\n\n\nThis issue affects Apache Camel: from 4.0.0 before 4.18.5, from 4.19.0 before 4.22.1.\n\n\n\nThe camel-hazelcast component applies a default Hazelcast JavaSerializationFilterConfig to the instances it creates from its own configuration, a protection introduced by CVE-2026-43865. That change did not reach two of the configuration paths Camel builds itself, so those paths continued to create Hazelcast instances whose Java deserialization is unrestricted. ReplicatedHazelcastAggregationRepository extends HazelcastAggregationRepository but overrides doStart() without calling super.doStart(), keeping its own copy of the bootstrap block, and therefore never received the filter: a route using it without supplying a hazelcastInstance starts a Hazelcast member that deserializes values read from the backing ReplicatedMap with no class restriction. HazelcastDefaultComponent#getOrCreateHzClientInstance() builds its own ClientConfig when hazelcastMode=client is selected and neither a referenced ClientConfig nor hazelcastConfigUri is supplied, and likewise applied no filter, so client-mode endpoints behaved differently from node-mode endpoints for an otherwise identical configuration. In both cases an attacker able to publish into the Hazelcast cluster that the affected instance is attached to can cause a serialized Java object of their choosing to be deserialized inside Hazelcast's own serialization layer, before Camel processes the exchange, resulting in remote code execution. Hazelcast clusters have neither authentication nor TLS enabled by default. Selecting client mode is a topology choice rather than a security option, so neither path required the deployment to opt in to unsafe behaviour.\n\n\n\nUsers are recommended to upgrade to version 4.23.0, which fixes the issue. If users are on the 4.22.x releases stream, then they are suggested to upgrade to 4.22.1. If users are on the 4.18.x releases stream, then they are suggested to upgrade to 4.18.5. The 4.14.x releases stream and earlier reached end of life before this issue was resolved and will not receive a fix, so deployments on those lines must move to a supported release. For deployments that cannot upgrade immediately, supply an explicit Hazelcast configuration carrying a JavaSerializationFilterConfig, or inject a pre-built HazelcastInstance, since a user-supplied configuration is never overwritten by Camel. Alternatively set the JVM-wide filter -Djdk.serialFilter=!java.net.;java.;javax.;org.apache.camel.;!* and enable Hazelcast cluster authentication and TLS to restrict who can reach the cluster.",
+    "nota": 10.0,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-112690",
+    "descricao": "This issue was addressed with improved input validation. This issue is fixed in iOS 26.7.2 and iPadOS 26.7.2, iOS 27.2 and iPadOS 27.2, macOS Golden Gate 27.2, macOS Sequoia 15.8.2, macOS Tahoe 26.7.2, visionOS 27.2. A remote attacker may be able to break out of the WebContent sandbox.",
+    "nota": 10.0,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-113897",
+    "descricao": "This issue was addressed by removing the vulnerable code. This issue is fixed in Safari 27.2, iOS 27.2 and iPadOS 27.2, macOS Golden Gate 27.2, visionOS 27.2. A remote attacker may be able to break out of Web Content sandbox.",
+    "nota": 10.0,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-120002",
+    "descricao": "Incorrect authorization in Microsoft Office SharePoint allows an authorized attacker to elevate privileges over a network.",
+    "nota": 9.9,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-64618",
+    "descricao": "Improper Neutralization of Special Elements used in an SQL Command (\"SQL Injection\") vulnerability exists in Apache Fineract (through version 1.15.0). The vulnerability affects the outStandingAmountPercentageCondition parameter of the /fineract-provider/api/v1/search/advance HTTP API endpoint, allowing SQL injection due to insufficient input neutralization. Users are recommended to upgrade to version 1.16.1, which will fix the issue.",
+    "nota": 9.8,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-120779",
+    "descricao": "Improper control of generation of code ('code injection') in Visual Studio Code allows an unauthorized attacker to execute code over a network.",
+    "nota": 9.6,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-118383",
+    "descricao": "A use-after-free in the replication component of MongoDB Server can occur when a newly elected replica set primary completes catch-up. The condition can be caused by requests that do not require authentication, and may result in the server terminating unexpectedly or, under certain conditions, arbitrary code execution in the context of the server process. Replica set members are affected, including the shard and config server replica set members of sharded clusters; standalone mongod instances are not.",
+    "nota": 9.5,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-100358",
+    "descricao": "SuiteCRM is an open-source, enterprise-ready Customer Relationship Management (CRM) software application. Prior to 7.15.2 and 8.10.2, the Studio Dropdown Editor passes $dropdown_name through html_entity_decode() and writes the result verbatim into a PHP language file under custom/ that is included on later page loads. An administrator can inject persistent PHP that executes as the web-server account, survives cache clears, and compromises application and host confidentiality, integrity, and availability. This issue is fixed in versions 7.15.2 and 8.10.2.",
+    "nota": 9.4,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-109444",
+    "descricao": "OpenSRE through 0.1.2026.10.19 contains an approval gate bypass vulnerability that allows attackers to execute shell_run commands without confirmation because the headless presenter's execution_allowed() always returns True. Attackers can inject instructions into alerts or Slack messages triaged by the agent to run commands on the host and exfiltrate LLM, Slack and cloud credentials.",
+    "nota": 9.3,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-77930",
+    "descricao": "EvoScientist 0.1.0 before 0.2.5 contains an approval bypass vulnerability that allows attackers to run host shell commands by delegating them to async sub-agents lacking an interrupt_on gate. Attackers can plant instructions in ingested content such as fetched web pages, so the agent calls start_async_task and runs commands with user privileges and environment secrets.",
+    "nota": 9.3,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-118333",
+    "descricao": "Buffer overflow in Video in Google Chrome prior to 156.0.8078.73 allowed a remote attacker to execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: High)",
+    "nota": 9.3,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-118337",
+    "descricao": "Use after free in Forms in Google Chrome prior to 156.0.8078.73 allowed a remote attacker to execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: High)",
+    "nota": 9.3,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-119706",
+    "descricao": "InternLM LMDeploy 0.9.0 through 0.18.0 contains an unauthenticated remote code execution vulnerability that allows remote attackers to run OS commands by sending pickled data to the /update_weights endpoint. Attackers can submit a base64-encoded crafted pickle in serialized_named_tensors, which ForkingPickler.loads deserializes without validation, executing commands as the api_server process.",
+    "nota": 9.3,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-116606",
+    "descricao": "An authentication bypass in Barracuda Email Security Gateway versions earlier than 9.4.0.030 allows an unauthenticated remote attacker to invoke a configuration-import function and restore a crafted, compatible backup archive, resulting in unauthorized modification of the appliance’s global configuration.",
+    "nota": 9.3,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-119757",
+    "descricao": "BTCPay Server before 2.4.2, including 2.4.2 release candidates, contains an information disclosure vulnerability that allows unauthenticated remote attackers to retrieve .macaroon credential files for an LND (Lightning Network Daemon) node. Attackers can use the exposed macaroon to gain full control of the LND node, including moving funds, resulting in theft of funds from affected deployments.",
+    "nota": 9.3,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-17131",
+    "descricao": "IBM API Connect 12.1.0.0 through 12.1.1.2 could allow a remote attacker to obtain sensitive information due to server-side request forgery. Restrictions on outbound requests can be bypassed, so the server could be made to contact unintended destinations and return the response.",
+    "nota": 9.3,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-112393",
+    "descricao": "Pillow is a Python imaging library. From 2.0.0 until 13.0.0, Pillow has a heap buffer overflow and stale-heap disclosure in _tiffWriteProc when saving compressed TIFF data through libtiff to a target without a usable fileno(), such as BytesIO. The callback sizes its allocation from the prior buffer size instead of the current write position, allowing an attacker-controlled out-of-line TIFF tag or retained ICC profile to be copied beyond the allocation after libtiff seeks forward. This overflow can crash the process and may allow code execution. Independently, unwritten alignment gaps in compressed TIFF output larger than 64 KiB can disclose stale heap bytes without a crafted tag. File paths and targets with real file descriptors are unaffected. This issue is fixed in version 13.0.0.",
+    "nota": 9.2,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-112398",
+    "descricao": "Pillow is a Python imaging library. Prior to 13.0.0, Pillow's FlashPix JPEG-tile decoder can write decoded scanlines beyond the allocated tile buffer. FlashPix (FPX) JPEG decoding selects raw mode LA with two bytes per pixel, while an unrecognized JPEG mode can be decoded as JCS_UNKNOWN with four components, causing ImagingJpegDecode to write four-component scanlines into the two-byte tile buffer. An attacker can supply a crafted OLE2 FlashPix file to an application with the optional olefile dependency installed that opens or thumbnails untrusted input. This can corrupt heap memory and may allow arbitrary code execution. This issue is fixed in version 13.0.0.",
+    "nota": 9.2,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-112403",
+    "descricao": "Pillow is a Python imaging library. Prior to 13.0.0, Pillow's JPEG decoder can write a full-width scanline into a buffer sized for a requested draft scale. ImagingJpegDecode does not verify libjpeg's actual output width and component count after scaling is requested, and an 8-bit lossless SOF3 JPEG decoded by a build linked to libjpeg-turbo 3.x can ignore the requested downscaling geometry. An attacker can supply such a JPEG to an application that uses draft() or thumbnail() to request downscaling. This can corrupt heap memory, crash the process, or potentially allow code execution. Older libjpeg-turbo 2.x and IJG builds reject the SOF3 input. This issue is fixed in version 13.0.0.",
+    "nota": 9.2,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-112900",
+    "descricao": "Pillow is a Python imaging library. From 2.6.0 until 13.0.0, Pillow is vulnerable to argument injection when invoking Ghostscript for EPS input. EpsImagePlugin.Ghostscript passes a caller-controlled input filename after -f without converting it to a safe absolute path, so a name beginning with a hyphen can be interpreted as a Ghostscript option. An attacker who controls the filename can inject Ghostscript arguments. Arbitrary command execution specifically requires a leading @ argument-file filename and control of the referenced text file containing additional Ghostscript arguments; the reported chain reproduces with the default -dSAFER invocation. This issue is fixed in version 13.0.0.",
+    "nota": 9.2,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-109618",
+    "descricao": "PHP uses longjmp() for out-of-memory (OOM) errors to exit the current context and abort handling of the request. Some contexts may not properly account for this scenario and leave request memory in an uninitialized state before performing an allocation. The subsequent request cleanup procedure may read or branch on this memory. Multiple OOM strategies can consistently trigger this condition and lead to remote code execution (RCE).",
+    "nota": 9.2,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-111497",
+    "descricao": "A buffer overflow vulnerability in the Brotli decoder (c/dec/decode.c) in Google Brotli versions 1.0.3 through 1.2.0 on all platforms allows a remote unauthenticated attacker to corrupt adjacent decoder state memory, disclose sensitive memory contents, cause a denial of service, or potentially execute arbitrary code using a crafted Brotli-compressed stream.\n\n\n\n\n\nUsers need to update any Brotli libraries or binaries between 1.0.3 through 1.2.0 to the latest available version: 1.0.10 or 1.1.1 or 1.2.1.",
+    "nota": 9.2,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-116238",
+    "descricao": "In server mode pgAdmin 4 locks an internal account after MAX_LOGIN_ATTEMPTS failed logins (3 by default). The limit could be bypassed, giving an unauthenticated attacker an unlimited number of password guesses against any internal account, including the administrator's, in the default configuration:\n\n- Flask-Security registers its own views next to pgAdmin's. A login submitted to its /login view was checked and logged in without pgAdmin's failed login count or lock. Its /verify view checked a signed-in user's password without limit, its /change view changed a password without pgAdmin's change password permission or re-encrypting the user's saved server passwords, and its /reset views sent and applied password resets for accounts that are not internal or are locked.\n- The internal account was looked up by its exact username, while the login form matches the email ignoring case, so a login with the username typed in another case was neither counted nor checked for the lock.\n- With LDAP or webserver authentication also configured, a wrong internal password was never counted, and with Kerberos or webserver authentication configured a guess could be answered without being counted.\n\nIn addition, where accounts from different authentication sources share an email address, a password reset could be sent for, or applied to, an account from another source, and the About box showed the server configuration to a user whose email was that of an administrator's account.\n\nThe fix refuses submissions to Flask-Security's own views, counts every failed internal login however the username is typed and whatever other sources are configured, no longer lets a login that posts a password fall back to an authentication source that does not check it, and locks only internal authentication. Password resets and the About box act only on the user's own internal account. Desktop mode is not affected.\n\nThis issue affects pgAdmin 4: before 9.19.",
+    "nota": 9.2,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-112352",
+    "descricao": "Sunhillo SureLine before 9.1.5 contains an authentication bypass vulnerability that allows an unauthenticated remote attacker to impersonate any user with an active web session by forging a session cookie containing only a cleartext username with no random identifier or integrity protection. Attackers can guess default account names such as Admin or sftp_user and submit a forged username cookie to satisfy the login check in checkLogin (libwebcmn.so) and networkDiag.cgi, chaining into root command execution.",
+    "nota": 9.1,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-85632",
+    "descricao": "Missing authentication for critical function and Improper validation of integrity check value vulnerability in Sipay Electronic Money and Payment Services Inc. WooCommerce Virtual POS Module allows Authentication Bypass and Application API Message Manipulation via Man-in-the-Middle.\n\nThis issue affects WooCommerce Virtual POS Module: from 26.8.3 before 26.9.1.",
+    "nota": 9.1,
+    "severidade": "CRITICAL"
+  },
+  {
+    "id": "CVE-2026-17280",
+    "descricao": "IBM API Connect 10.0.8.0 through 10.0.8.12 and 12.1.0.0 through 12.1.1.2 could allow a remote attacker to perform unauthenticated brute-force attacks to obtain valid credentials due to improper restriction of excessive authentication attempts.",
+    "nota": 8.9,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-17291",
+    "descricao": "IBM API Connect 10.0.8.0 through 10.0.8.12 and 12.1.0.0 through 12.1.1.2 could allow a remote authenticated attacker to perform account takeover due to an open redirect vulnerability. The redirect address used during OAuth 2.0 sign-in is not sufficiently validated, which could allow authentication results to be sent to an attacker-controlled location.",
+    "nota": 8.7,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-112902",
+    "descricao": "Pillow is a Python imaging library. In versions through 12.3.0, the libtiff TIFF encoder can pass arguments to  TIFFSetField()  that do not match libtiff’s definition of the corresponding tag. When an application saves attacker-controlled image metadata through this encoder, crafted tag values can cause invalid memory reads, copying process memory into the encoded output or crashing the process. Applications that return the encoded output to an attacker can disclose that memory. The issue is reachable when re-saving compressed TIFF images and through certain conversions that preserve EXIF metadata into compressed TIFF output. This vulnerability is fixed in version 13.0.0.",
+    "nota": 8.3,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-12665",
+    "descricao": "IBM MQ could allow a remote attacker to execute arbitrary code due to a stack buffer overflow when processing TLS certificates with malformed distinguished names during channel connection establishment.",
+    "nota": 8.1,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-115915",
+    "descricao": "vLLM is an inference and serving engine for large language models. Prior to 0.32.0, ImageMediaIO passes attacker-controlled image bytes to Pillow through Image.open(BytesIO(data)) without restricting decoder selection, and the MIME label does not constrain the selected format. Image-capable request paths through parse_image() and fetch_image() can therefore dispatch an EPS payload to host components. A host with Ghostscript affected by CVE-2024-29510 can execute commands with the vLLM process's privileges, while environments using Pillow 12.0.0 through 12.2.0 can trigger CVE-2026-59203 and exhaust media-loading workers. Deployments without the applicable vulnerable dependency are not affected by that corresponding impact. This issue is fixed in version 0.32.0.",
+    "nota": 8.1,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-104317",
+    "descricao": "IBM Langflow OSS 1.0.0 through 1.12.3 could allow a remote attacker who could reach the message broker to execute arbitrary code on the system due to the deserialization of untrusted data.",
+    "nota": 8.1,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-123280",
+    "descricao": "In JetBrains Datalore before 2026.2.4 unauthenticated users could execute code via published interactive reports",
+    "nota": 8.1,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-56712",
+    "descricao": "Replicate Cog through 0.23.1 contains a server-side request forgery vulnerability that allows attackers to cause the Cog process to make server-side HTTP requests by submitting prediction inputs with attacker-controlled URLs that are not validated against the resolved destination host or IP before fetching. Attackers can supply malicious URLs or exploit HTTP redirects in cog.File and cog.Path predictor inputs to force requests to internal addresses, potentially exposing sensitive internal services or credentials.",
+    "nota": 7.8,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-85079",
+    "descricao": "In EmberZNet 9.1.1 and earlier, a malformed Simple_Desc_req response can result in an out-of-bounds write potentially leading to remote code execution. This response must come from a device that has already joined the network, and the attacker must wait for a Simple_Desc_req before the attack can be performed.",
+    "nota": 7.5,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-94502",
+    "descricao": "In EmberZNet 9.1.1 and earlier, a malformed Publish Price Matrix command can result in an out-of-bounds write potentially leading to remote code execution. These messages must come from a device that has already joined the network. Only devices supporting the Price Cluster are impacted.",
+    "nota": 7.5,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-79983",
+    "descricao": "Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') vulnerability in Apache Camel FTP component.\n\n\n\nThis issue affects Apache Camel: from 4.0.0 before 4.18.5, from 4.19.0 before 4.22.1.\n\n\n\nThe Camel remote-file consumers poll a directory on a remote server and build the absolute remote path of each file by concatenating the configured directory with the file name reported in the server's directory listing. That concatenation (FtpUtils.absoluteFilePath and GenericFileConsumer) applied no lexical normalization and no check that the result stayed inside the directory being polled, and the resulting path became the operand for every subsequent remote operation on the file: retrieval (FtpOperations.retrieveFile / SftpOperations, reached from GenericFileConsumer where the retrieve name is taken verbatim from GenericFile.getAbsoluteFilePath), deletion when delete=true (GenericFileDeleteProcessStrategy), and renaming when move, preMove, moveFailed or readLock=rename is configured (GenericFileProcessStrategySupport and GenericFileRenameExclusiveReadLockStrategy). Neither isValidFile nor isMatched performed any containment check. A listing entry that is not a single path segment therefore resolved to a path outside the configured polling directory, causing Camel to read, delete or rename files outside it using the endpoint's own credentials. A listing name is not route-controlled data. It is supplied by the remote server, and the FTP control channel carries no integrity protection at all, so an on-path attacker can rewrite a LIST response without holding any credentials; a compromised, malicious or multi-tenant server, or a server backed by a virtual filesystem, can emit such a name directly. Retrieval is reachable in a default consumer configuration, since the remote consumers download every listed file; deletion and renaming additionally require one of the disposition options above, all of which are common. Escape from the directory Camel was configured to poll is unconditional, while escape from the server's own account boundary additionally depends on whether that server confines the account. The jailStartingDirectory option, which is documented as restricting Camel to the starting directory and is enabled by default, governed producer writes and, since the localWorkDirectory containment work, consumer downloads to the local work directory - but it did not constrain this remote operand, so its name and description claimed a boundary that was not enforced here. The same entry point had already been recognised on the local side: the localWorkDirectory download path was constrained so that a remote file name containing parent-directory segments could not resolve outside the local work directory. The remote operand was the remaining half of that surface. This artifact provides the ftp, ftps and sftp schemes, all of which are affected. The reporter demonstrated the issue end to end against an ftp endpoint, driving a Camel route with a malicious server whose LIST response named a file outside the polled directory.\n\n\n\nUpgrade to Apache Camel 4.23.0, which fixes the issue. Users on the 4.22.x releases stream should upgrade to 4.22.1. Users on the 4.18.x LTS releases stream should upgrade to 4.18.5. The 4.14.x stream reached end of life and does not receive this fix; users on it should move to a supported releases stream.",
+    "nota": 7.4,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-79986",
+    "descricao": "Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') vulnerability in Apache Camel Azure Files component.\n\n\n\nThis issue affects Apache Camel: from 4.0.0 before 4.18.5, from 4.19.0 before 4.22.1.\n\n\n\nThe Camel remote-file consumers poll a directory on a remote server and build the absolute remote path of each file by concatenating the configured directory with the file name reported in the server's directory listing. That concatenation (FtpUtils.absoluteFilePath and GenericFileConsumer) applied no lexical normalization and no check that the result stayed inside the directory being polled, and the resulting path became the operand for every subsequent remote operation on the file: retrieval (FtpOperations.retrieveFile / SftpOperations, reached from GenericFileConsumer where the retrieve name is taken verbatim from GenericFile.getAbsoluteFilePath), deletion when delete=true (GenericFileDeleteProcessStrategy), and renaming when move, preMove, moveFailed or readLock=rename is configured (GenericFileProcessStrategySupport and GenericFileRenameExclusiveReadLockStrategy). Neither isValidFile nor isMatched performed any containment check. A listing entry that is not a single path segment therefore resolved to a path outside the configured polling directory, causing Camel to read, delete or rename files outside it using the endpoint's own credentials. A listing name is not route-controlled data. It is supplied by the remote server, and the FTP control channel carries no integrity protection at all, so an on-path attacker can rewrite a LIST response without holding any credentials; a compromised, malicious or multi-tenant server, or a server backed by a virtual filesystem, can emit such a name directly. Retrieval is reachable in a default consumer configuration, since the remote consumers download every listed file; deletion and renaming additionally require one of the disposition options above, all of which are common. Escape from the directory Camel was configured to poll is unconditional, while escape from the server's own account boundary additionally depends on whether that server confines the account. The jailStartingDirectory option, which is documented as restricting Camel to the starting directory and is enabled by default, governed producer writes and, since the localWorkDirectory containment work, consumer downloads to the local work directory - but it did not constrain this remote operand, so its name and description claimed a boundary that was not enforced here. The same entry point had already been recognised on the local side: the localWorkDirectory download path was constrained so that a remote file name containing parent-directory segments could not resolve outside the local work directory. The remote operand was the remaining half of that surface. This artifact provides the azure-files scheme. Its consumer derives from the same RemoteFileConsumer base class and composed the remote path through a plain concatenation helper, so it inherited the same unconstrained resolution. Reaching it requires a listing name that is not a single path segment, which the Azure Files REST service does not normally return; the exposure was corrected on the same basis as the other remote-file consumers rather than from a demonstrated proof of concept against this scheme.\n\n\n\nUpgrade to Apache Camel 4.23.0, which fixes the issue. Users on the 4.22.x releases stream should upgrade to 4.22.1. Users on the 4.18.x LTS releases stream should upgrade to 4.18.5. The 4.14.x stream reached end of life and does not receive this fix; users on it should move to a supported releases stream.",
+    "nota": 7.4,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-114615",
+    "descricao": "Authlib is a Python library which builds OAuth and OpenID Connect servers. From 1.3.1 until 1.9.0, OctKey.import_key() checks asymmetric-key markers only at byte zero while Authlib's PEM loaders accept leading whitespace, comments, or a byte-order mark. In deployments that use the documented mixed algorithm registry and already configure verification with PEM or certificate bytes containing such a prefix, an unauthenticated attacker who knows those same public-key bytes can use them as an HMAC secret and forge HS256 tokens with arbitrary identity or authorization claims. This is a bypass of the remediation for CVE-2024-37568. The module-level jwt object reaches OctKey.import_key() in authlib/jose/rfc7518/oct_key.py, where POSSIBLE_UNSAFE_KEYS fails to identify prefixed asymmetric key material. This issue is fixed in version 1.9.0.",
+    "nota": 7.4,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-114616",
+    "descricao": "Authlib is a Python library which builds OAuth and OpenID Connect servers. Prior to 1.9.1, Authlib's OctKey.import_key() and HMAC signing and verification path accept zero-length key material. If an application's secret lookup can return an empty string or empty bytes, a remote attacker can compute the deterministic HS256, HS384, or HS512 signature for arbitrary token claims and have Authlib treat the token as authentic. This issue is fixed in version 1.9.1.",
+    "nota": 7.4,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-123282",
+    "descricao": "In JetBrains Datalore before 2026.4 missing expiration validation of account tokens allowed a new authenticated session",
+    "nota": 7.4,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-116249",
+    "descricao": "In server mode pgAdmin 4 resolves a server's password file, SSL certificate, key, CRL and SSH tunnel identity file relative to the user's storage directory, but get_complete_file_path() only stripped leading slashes before joining the two. A path such as \"../<another user>/.pgpass\", set through the server dialog, the REST API or a servers.json import, therefore named another user's file, and connecting used that user's saved passwords, client certificate or SSH key. The sslkeylogfile connection parameter was passed to libpq unchanged, so a path outside storage let libpq create or append a file as the account running pgAdmin.\n\nmake_conninfo() also quoted connection parameter values but not their names, so a crafted parameter name could smuggle additional keyword=value pairs past these checks.\n\nThe fix requires the resolved path, with symbolic links followed, to stay inside the user's storage directory or the named shared storage directory, confines sslkeylogfile the same way, and accepts only exact libpq keywords as connection parameter names. A refused path or keyword is reported instead of letting libpq fall back to a default.\n\nThis issue affects pgAdmin 4: before 9.19.",
+    "nota": 7.2,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-116242",
+    "descricao": "pgAdmin 4 opens SSH tunnels with the sshtunnel library but gave it neither host_pkey_directories nor ssh_config_file, so it always loaded the unencrypted private keys in ~/.ssh of the operating-system account running pgAdmin, read that account's ~/.ssh/config (IdentityFile, User, HostName, ProxyCommand) for the tunnel host, and could use its ssh-agent. In server mode any user could therefore configure a tunnel to a host that accepts the service account's key, with no credentials of their own or with an identity file that did not exist in their storage, and reach it as that account.\n\nThe fix makes tunnels in server mode use only the identity file or password the user configured: the service account's keys, configuration and agent are no longer used, and an identity file that cannot be found in the user's storage is reported instead of falling back to ~/.ssh. Desktop mode is unchanged.\n\nThis issue affects pgAdmin 4: before 9.19.",
+    "nota": 7.1,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-116244",
+    "descricao": "When a pgAdmin 4 connection was not meant to use a Kerberos user's delegated credentials, pgAdmin removed KRB5CCNAME from its environment, so the Kerberos library fell back to the default credential cache, or a client keytab, of the operating-system account running pgAdmin. libpq then answered any server that asked for GSSAPI authentication with that account's ticket, whatever user name the pgAdmin user gave, so in server mode any user could connect as the service account's Kerberos principal; gssencmode=disable did not prevent it. On Windows, SSPI used the service account's logon in the same way. psql was also started with pgAdmin's environment, which could hold another user's credential cache while that user was connecting.\n\nThe fix points KRB5CCNAME and KRB5_CLIENT_KTNAME at a file that cannot exist except while a Kerberos-authenticated user connects with Kerberos, and gives every other connection, psql and the utilities require_auth=!gss,!sspi and gssencmode=disable, checked on the final connection string. require_auth needs libpq 16 or later.\n\nThis issue affects pgAdmin 4: before 9.19.",
+    "nota": 7.1,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-116245",
+    "descricao": "libpq looks a connection service up in the service file of the operating-system account running pgAdmin 4, and an entry there can hold a password or name a password file or client certificate. In server mode any user could set a server's Service, or a \"service\" connection parameter, to one of those entries and connect with its credentials. A PGPASSWORD or PGSERVICE variable set for that account was likewise used by libpq for every connection without a value of its own and passed on to the utilities, and pg_dumpall read a maintenance database name such as \"service=...\" as a connection string.\n\nThe fix adds the SERVER_MODE_ALLOWED_SERVICES setting, empty by default: in server mode only a listed service can be used, the servicefile parameter is refused, and PGPASSWORD and PGSERVICE are removed from pgAdmin's environment at startup. The allowlist is checked again on the final connection string, and the pg_dumpall database name is wrapped as a connection string.\n\nThis issue affects pgAdmin 4: before 9.19.",
+    "nota": 7.1,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-116247",
+    "descricao": "When a server in pgAdmin 4 had no password file, client certificate or client key configured, or the configured one could not be found, pgAdmin left the parameter out of the connection and libpq fell back to the defaults of the operating-system account running pgAdmin: ~/.pgpass, ~/.postgresql/postgresql.crt and postgresql.key, or PGPASSFILE, PGSSLCERT and PGSSLKEY. In server mode any user could therefore connect to a server with the service account's saved passwords or client certificate, and supplying only a copy of its public certificate was enough for libpq to pair it with the service account's private key. A pg_service.conf entry, or a maintenance database name read as a connection string by pg_dumpall, could bring the same files back for the utilities.\n\nThe fix gives each of these parameters a value in server mode, the user's own file or otherwise a path that can never be opened, in the connection string, in the environment of the utilities and in the --dbname connection string that ranks above a service entry. Desktop mode is unchanged.\n\nThis issue affects pgAdmin 4: before 9.19.",
+    "nota": 7.1,
+    "severidade": "HIGH"
+  },
+  {
+    "id": "CVE-2026-114656",
+    "descricao": "Traefik before 2.11.58 and 3.7.13 contains an authentication bypass vulnerability that allows unauthenticated clients to skip client-certificate checks because negated Host matchers are counted as served domains. Attackers can reach backends protected by RequireAndVerifyClientCert when a router rule with !Host() creates a TLS options conflict that falls back to the default options.",
+    "nota": 6.9,
+    "severidade": "MEDIUM"
+  },
+  {
+    "id": "CVE-2026-18894",
+    "descricao": "IBM Langflow OSS 1.0.0 through 1.12.4 could allow a remote attacker to trigger pre-existing stored Python component code in a public workflow, executing it under the flow owner's runtime context within the server process. This bypasses the intended trust boundary where public execution paths are restricted to server-trusted component code.",
+    "nota": 6.5,
+    "severidade": "MEDIUM"
+  },
+  {
+    "id": "CVE-2026-85080",
+    "descricao": "In EmberZNet 9.1.1 and earlier, a malformed GetGroupMembership message can result in an out-of-bounds write leading to a crash. A limited number of values can be written using this vulnerability, so no route to remote code execution was observed. These messages must come from a device that has already joined the network. Only devices supporting the Group Cluster are impacted.",
+    "nota": 6.0,
+    "severidade": "MEDIUM"
+  },
+  {
+    "id": "CVE-2026-116111",
+    "descricao": "A vulnerability was determined in 2K Games Civilization V 1.0.3.144. Impacted is the function loadstring of the component Lua Sandbox. Executing a manipulation can lead to type confusion. The attack may be performed from remote. The exploit has been publicly disclosed and may be utilized. The vendor was contacted early about this disclosure but did not respond in any way.",
+    "nota": 2.1,
+    "severidade": "LOW"
+  },
+  {
+    "id": "CVE-2026-116370",
+    "descricao": "A security flaw has been discovered in 2K Games Sid Meier's Civilization VI 1.0.12.68. The affected element is the function loadstring of the component Lua sandbox. Performing a manipulation results in type confusion. The attack may be initiated remotely. The exploit has been released to the public and may be used for attacks. The patch is named Hotfix November 2026. The vendor was contacted early about this disclosure.",
+    "nota": 2.1,
+    "severidade": "LOW"
+  }
+]

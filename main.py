@@ -1,7 +1,11 @@
-import csv 
-import json 
+import csv
+import json
+import os  
 import requests
 from datetime import datetime, timedelta
+from dotenv import load_dotenv  
+
+load_dotenv()  
 
 URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
 
@@ -72,6 +76,7 @@ def ordenar_por_nota(lista):
         reverse=True,
     )
 
+
 def salvar_csv(lista, nome_arquivo):
     colunas = ["id", "descricao", "nota", "severidade"]
     with open(nome_arquivo, "w", newline="", encoding="utf-8") as arquivo:
@@ -80,20 +85,52 @@ def salvar_csv(lista, nome_arquivo):
         escritor.writerows(lista)
 
 
-# NOVO
 def salvar_json(lista, nome_arquivo):
     with open(nome_arquivo, "w", encoding="utf-8") as arquivo:
         json.dump(lista, arquivo, ensure_ascii=False, indent=2)
 
 
+def enviar_aviso(mensagem):
+    token = os.getenv("TELEGRAM_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        print("Token ou chat_id não encontrados no .env")
+        return
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    try:
+        resposta = requests.post(
+            url,
+            data={"chat_id": chat_id, "text": mensagem},
+            timeout=10,
+        )
+        resposta.raise_for_status()
+        print("Aviso enviado no Telegram")
+    except requests.exceptions.HTTPError as erro:
+        print(f"Erro ao enviar aviso: HTTP {erro.response.status_code}")
+        print(erro.response.text)
+    except requests.exceptions.RequestException as erro:
+        print(f"Erro ao enviar aviso: {type(erro).__name__}")
+# NOVO (passo 5)
+def montar_mensagem(lista, limite=10):
+    if not lista:
+        return "Monitor de CVEs: nenhum CVE encontrado hoje."
+
+    mostrados = lista[:limite]
+    linhas = [f"🚨 {len(lista)} CVEs encontrados (top {len(mostrados)}):\n"]
+    for cve in mostrados:
+        descricao = (cve["descricao"] or "")[:100]
+        linhas.append(f'{cve["id"]} | nota {cve["nota"]}\n{descricao}\n')
+
+    return "\n".join(linhas)[:4000]  # Telegram aceita no máximo 4096 caracteres
+
+
 def main():
-    
     QUANTIDADE = 50
     SEVERIDADE = "CRITICAL"
     DIAS = 30
     PALAVRA = None
     NOTA_MINIMA = 0
-    
 
     dados = buscar_cves(QUANTIDADE, SEVERIDADE, DIAS, PALAVRA)
     if dados is None:
@@ -111,11 +148,12 @@ def main():
         print(f'{cve["id"]} | nota {cve["nota"]} | {cve["severidade"]}')
         print(f'   {(cve["descricao"] or "")[:150]}\n')
 
-    # NOVO
     data_hoje = datetime.now().strftime("%Y-%m-%d")
     salvar_csv(filtrados, f"cves_{data_hoje}.csv")
     salvar_json(filtrados, f"cves_{data_hoje}.json")
     print(f"Arquivos salvos: cves_{data_hoje}.csv e cves_{data_hoje}.json")
+
+    enviar_aviso(montar_mensagem(filtrados))
 
 
 if __name__ == "__main__":
